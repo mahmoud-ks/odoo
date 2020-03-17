@@ -1575,7 +1575,20 @@ class AccountMove(models.Model):
         if any('state' in vals and vals.get('state') == 'posted' for vals in vals_list):
             raise UserError(_('You cannot create a move already in the posted state. Please create a draft move and post it after.'))
 
+        stock_picking = False
         vals_list = self._move_autocomplete_invoice_lines_create(vals_list)
+
+        try:
+            if vals_list[0]['line_ids'][0][2]['product_uom_id']:
+                stock_picking = self.env['stock.move'].browse(vals_list[0]['stock_move_id'])
+                if stock_picking:
+                    date_done = stock_picking.picking_id.date_done
+                    if date_done:
+                        date_done = stock_picking.picking_id.date_done
+                        vals_list[0]['date'] = date_done
+        except:
+            pass
+
         return super(AccountMove, self).create(vals_list)
 
     def write(self, vals):

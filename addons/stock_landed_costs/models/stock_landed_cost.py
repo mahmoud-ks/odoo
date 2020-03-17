@@ -152,6 +152,7 @@ class LandedCost(models.Model):
                         'product_id': line.move_id.product_id.id,
                         'stock_landed_cost_id': cost.id,
                         'company_id': cost.company_id.id,
+                        'entries_date': cost.date,
                     })
                     linked_layer.remaining_value += cost_to_add
                     valuation_layer_ids.append(valuation_layer.id)

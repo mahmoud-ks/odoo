@@ -407,7 +407,9 @@ class StockMoveLine(models.Model):
         # the line. It is mandatory in order to free the reservation and correctly apply
         # `action_done` on the next move lines.
         ml_to_delete = self.env['stock.move.line']
+        accounting_date = False
         for ml in self:
+            accounting_date = ml.move_id.inventory_id.accounting_date
             # Check here if `ml.qty_done` respects the rounding of `ml.product_uom_id`.
             uom_qty = float_round(ml.qty_done, precision_rounding=ml.product_uom_id.rounding, rounding_method='HALF-UP')
             precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
@@ -482,10 +484,28 @@ class StockMoveLine(models.Model):
                 Quant._update_available_quantity(ml.product_id, ml.location_dest_id, quantity, lot_id=ml.lot_id, package_id=ml.result_package_id, owner_id=ml.owner_id, in_date=in_date)
             done_ml |= ml
         # Reset the reserved quantity as we just moved it to the destination location.
-        (self - ml_to_delete).with_context(bypass_reservation_update=True).write({
-            'product_uom_qty': 0.00,
-            'date': fields.Datetime.now(),
-        })
+        #dateDoneT = self.env['stock.picking'].browse(self.picking_id.id).date_done
+        dateDones = []
+        for sess in self:
+            dateDone = self.env['stock.picking'].browse(sess.picking_id.id).date_done
+            if dateDone:
+                dateDones.append(dateDone)
+                print(dateDone)
+        #for ids in self.picking_id.id:
+
+        if dateDones:
+            for dateDone in dateDones:
+                (self - ml_to_delete).with_context(bypass_reservation_update=True).write({
+                    'product_uom_qty': 0.00,
+                    'date':fields.Datetime.from_string(dateDone),
+                })
+        else:
+            if not accounting_date:
+                accounting_date = fields.Datetime.now()
+            (self - ml_to_delete).with_context(bypass_reservation_update=True).write({
+                'product_uom_qty': 0.00,
+                'date': accounting_date,
+            })
 
     def _reservation_is_updatable(self, quantity, reserved_quant):
         self.ensure_one()

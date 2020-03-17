@@ -250,7 +250,7 @@ class Picking(models.Model):
     note = fields.Text('Notes')
     backorder_id = fields.Many2one(
         'stock.picking', 'Back Order of',
-        copy=False, index=True, readonly=True,
+        copy=False, index=True, readonly=False,
         check_company=True,
         help="If this shipment was split, then this field links to the shipment which contains the already processed part.")
     backorder_ids = fields.One2many('stock.picking', 'backorder_id', 'Back Orders')
@@ -293,7 +293,7 @@ class Picking(models.Model):
         default=fields.Datetime.now, index=True, tracking=True,
         states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
         help="Creation Date, usually the time of the order")
-    date_done = fields.Datetime('Date of Transfer', copy=False, readonly=True, help="Date at which the transfer has been processed or cancelled.")
+    date_done = fields.Datetime('Date of Transfer', copy=False, readonly=False, help="Date at which the transfer has been processed or cancelled.")
     location_id = fields.Many2one(
         'stock.location', "Source Location",
         default=lambda self: self.env['stock.picking.type'].browse(self._context.get('default_picking_type_id')).default_location_src_id,
@@ -719,7 +719,12 @@ class Picking(models.Model):
                     todo_moves |= new_move
                     #'qty_done': ops.qty_done})
         todo_moves._action_done(cancel_backorder=self.env.context.get('cancel_backorder'))
-        self.write({'date_done': fields.Datetime.now()})
+        if self.date_done:
+            todo_moves.stock_valuation_layer_ids.entries_date = self.date_done
+            self.write({'date_done': self.date_done})
+        else:
+            todo_moves._action_done()
+            self.write({'date_done': fields.Datetime.now()})
         self._send_confirmation_email()
         return True
 
