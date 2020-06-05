@@ -135,13 +135,9 @@ class StockMove(models.Model):
         for move in self.filtered(lambda x: x.production_id or x.raw_material_production_id):
             if move.move_line_ids:
                 move.move_line_ids.write({'production_id': move.raw_material_production_id.id,
-                                               'workorder_id': move.workorder_id.id,})
-                """
-                move.move_line_ids.write({'production_id': move.raw_material_production_id.id,
                                                'workorder_id': move.workorder_id.id,
                                                'date': move.raw_material_production_id.date_deadline,})
-                                               """
-                #move.write({'date': move.raw_material_production_id.date_deadline,})
+                move.write({'date': move.raw_material_production_id.date_deadline,})
         return res
 
     def _action_confirm(self, merge=True, merge_into=False):
@@ -200,7 +196,7 @@ class StockMove(models.Model):
         move_line_to_unlink = self.env['stock.move.line']
         for move in self:
             reserved_quantity = quantity
-            for move_line in move.move_line_ids:
+            for move_line in self.move_line_ids:
                 if move_line.product_uom_qty > reserved_quantity:
                     move_line.product_uom_qty = reserved_quantity
                 else:
@@ -210,11 +206,6 @@ class StockMove(models.Model):
                     move_line_to_unlink |= move_line
         move_line_to_unlink.unlink()
         return True
-
-    def _do_unreserve(self):
-        production_moves = self.filtered(lambda m: m.raw_material_production_id or m.production_id)
-        production_moves._decrease_reserved_quanity(0.0)
-        return super(StockMove, self - production_moves)._do_unreserve()
 
     def _prepare_phantom_move_values(self, bom_line, product_qty, quantity_done):
         return {

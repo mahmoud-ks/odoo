@@ -200,6 +200,7 @@ class StockMoveLine(models.Model):
         mls = super(StockMoveLine, self).create(vals_list)
 
         for ml, vals in zip(mls, vals_list):
+            ml.date = ml.move_id.date
             if ml.move_id and \
                     ml.move_id.picking_id and \
                     ml.move_id.picking_id.immediate_transfer and \
