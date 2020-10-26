@@ -1,0 +1,131 @@
+.pos .product .minus {
+    top: -10px;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    float: right;
+    right: 0px;
+    min-height: 14px;
+    line-height: 20px;
+    max-height: 60px;
+    max-width: 60px;
+    font-size: 13px;
+    background: #FF5722;
+}
+.pos .combo_item_name {
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+.pos .combo-item-product_list_image {
+    margin-top: -30px;
+    width: 90px;
+    height: 90px;
+}
+.pos .product .plus {
+    top: -10px;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    float: left;
+    left: -1px;
+    min-height: 14px;
+    line-height: 20px;
+    max-height: 60px;
+    max-width: 60px;
+    font-size: 13px;
+    background: #0027ff;
+}
+
+.pos .pull-left {
+    width: 30%;
+    text-align: center;
+}
+
+.pos .pull-right {
+    width: 30%;
+    text-align: center;
+}
+.pos .combo-item-cart_qty {
+    position: absolute;
+    z-index: 999;
+    left: 0;
+    top: 90px;
+    background: black;
+    color: #fff;
+    line-height: 25px;
+    min-width: 25px;
+    max-height: 25px;
+    margin-right: 0px;
+    text-align: center;
+    border-radius: 65%;
+    font-size: 18px;
+    font-weight: 400;
+}
+.pos .combo-item-product_list_image {
+
+}
+.pos .product .price-combo-tag {
+    position: absolute;
+    bottom: 0px;
+    right: 2px;
+    vertical-align: top;
+    color: white;
+    line-height: 13px;
+    background: #7f82ac;
+    padding: 2px 5px;
+    border-radius: 2px;
+}
+
+.pos .ribbon {
+    position: initial;
+    left: -5px;
+    top: -5px;
+    z-index: 1;
+    overflow: hidden;
+    width: 75px;
+    text-align: right;
+}
+.pos .ribbon .out_stock span{
+    background: #FF5722 !important;
+}
+.pos .ribbon .limit_stock span{
+    background: orange !important;
+}
+
+.pos .ribbon span {
+    background: #6ec89b;
+    color: #fff;
+    text-align: center;
+    transform: rotate(45deg);
+    width: 250px;
+    font-size: 13px;
+    display: block;
+    position: absolute;
+    top: 50px;
+    left: -66px;
+    line-height: 20px;
+}
+
+.pos .ribbon span::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 100%;
+    z-index: -1;
+    border-left: 3px solid #FF5722;
+    border-right: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #FF5722;
+}
+
+.pos .ribbon span::after {
+    content: "";
+    position: absolute;
+    right: 0px;
+    top: 100%;
+    z-index: -1;
+    border-left: 3px solid transparent;
+    border-right: 3px solid #FF5722;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #FF5722;
+}

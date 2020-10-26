@@ -39,3 +39,11 @@ setup/win32/static/postgresql*.exe
 /share/
 /src/
 odoo.rar
+*.png
+*.jpg
+*.rar
+*.po
+*.html
+*.gif
+*.zip
+*.jpeg

@@ -911,6 +911,7 @@ class MrpProduction(models.Model):
             order._cal_price(moves_to_do)
             moves_to_finish = order.move_finished_ids.filtered(lambda x: x.state not in ('done', 'cancel'))
             moves_to_finish = moves_to_finish._action_done()
+            moves_to_finish.move_line_ids[0].date = self.date_deadline
             order.workorder_ids.mapped('raw_workorder_line_ids').unlink()
             order.workorder_ids.mapped('finished_workorder_line_ids').unlink()
             #moves_to_finish.date = self.date_deadline

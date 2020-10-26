@@ -908,6 +908,7 @@ class MrpProduction(models.Model):
             #moves_to_do[0].stock_valuation_layer_ids.entries_date = self.date_deadline
 
             moves_to_finish = moves_to_finish._action_done()
+            moves_to_finish.move_line_ids[0].date = self.date_deadline
             moves_to_finish.stock_valuation_layer_ids.write({'entries_date': self.date_deadline})
             #moves_to_do[0].stock_valuation_layer_ids.entries_date = self.date_deadline
             moves_to_do.stock_valuation_layer_ids.entries_date = self.date_deadline

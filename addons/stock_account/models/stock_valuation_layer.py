@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import fields, models, tools
+import datetime
 
 
 class StockValuationLayer(models.Model):
@@ -30,6 +31,7 @@ class StockValuationLayer(models.Model):
     stock_valuation_layer_ids = fields.One2many('stock.valuation.layer', 'stock_valuation_layer_id')
     stock_move_id = fields.Many2one('stock.move', 'Stock Move', readonly=True, check_company=True, index=True)
     account_move_id = fields.Many2one('account.move', 'Journal Entry', readonly=True, check_company=True)
+    entries_date = fields.Datetime(readonly=True, default=datetime.datetime.now())
 
     def init(self):
         tools.create_index(

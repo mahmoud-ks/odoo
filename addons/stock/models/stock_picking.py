@@ -293,7 +293,7 @@ class Picking(models.Model):
         default=fields.Datetime.now, index=True, tracking=True,
         states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
         help="Creation Date, usually the time of the order")
-    date_done = fields.Datetime('Date of Transfer', copy=False, readonly=True, help="Date at which the transfer has been processed or cancelled.")
+    date_done = fields.Datetime('Date of Transfer', copy=False, readonly=False, help="Date at which the transfer has been processed or cancelled.")
     location_id = fields.Many2one(
         'stock.location', "Source Location",
         default=lambda self: self.env['stock.picking.type'].browse(self._context.get('default_picking_type_id')).default_location_src_id,
